@@ -1,0 +1,61 @@
+Arguments: 
+  /usr/local/bin/node /usr/local/bin/yarn add reaact-router-dom@6
+
+PATH: 
+  /bin:/usr/bin:/usr/local/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  18.18.0
+
+Platform: 
+  linux x64
+
+Trace: 
+  Error: https://registry.yarnpkg.com/reaact-router-dom: Not found
+      at params.callback (/usr/local/lib/node_modules/yarn/dist/yarn.js:56516:18)
+      at self.callback (/usr/local/lib/node_modules/yarn/dist/yarn.js:124819:22)
+      at EventEmitter.emit (node:events:42:9202)
+      at Request.eval (/usr/local/lib/node_modules/yarn/dist/yarn.js:125791:10)
+      at EventEmitter.emit (node:events:42:9202)
+      at IncomingMessage.eval (/usr/local/lib/node_modules/yarn/dist/yarn.js:125713:12)
+      at Object.onceWrapper (node:events:42:10429)
+      at EventEmitter.emit (node:events:42:9318)
+      at endReadableNT (node:internal/streams/readable:105:15152)
+      at _0x271e3f (https://journalapp-rkzv.w-corp.staticblitz.com/blitz.d3416dfd.js:352:156353)
+
+npm manifest: 
+  {
+    "name": "vite-react-starter",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+      "dev": "vite",
+      "build": "vite build",
+      "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
+      "preview": "vite preview"
+    },
+    "dependencies": {
+      "react": "^18.2.0",
+      "react-dom": "^18.2.0"
+    },
+    "devDependencies": {
+      "@types/react": "^18.2.41",
+      "@types/react-dom": "^18.2.17",
+      "@vitejs/plugin-react": "^4.2.0",
+      "eslint": "^8.55.0",
+      "eslint-plugin-react": "^7.33.2",
+      "eslint-plugin-react-hooks": "^4.6.0",
+      "eslint-plugin-react-refresh": "^0.4.5",
+      "vite": "^5.0.4"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
