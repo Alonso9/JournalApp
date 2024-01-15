@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/material'
+import { Grid, Toolbar, Typography } from '@mui/material'
 
 export const AuthLayout = ({children, title = ''}) => {
     console.log(title)
@@ -24,6 +24,8 @@ export const AuthLayout = ({children, title = ''}) => {
           </div>
           
         </Grid>
+        <Toolbar/>
+        <i className="fa fa-spinner fa-spin">Alonso Journal App</i>
     </Grid>
   )
 }
