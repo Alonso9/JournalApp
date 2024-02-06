@@ -27,8 +27,8 @@ export const NoteView = () => {
                 variant='filled'
                 fullWidth
                 multiline
-                placeholder='What happend today?'
-                // label='Title'
+                placeholder='Write something about'
+                label='What happend today?'
                 sx={{ border: 'none', mb: 1 }}
                 minRows={ 5 }
             />
