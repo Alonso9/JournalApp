@@ -1,8 +1,6 @@
 import { Grid, Toolbar, Typography } from '@mui/material'
 
 export const AuthLayout = ({children, title = ''}) => {
-    console.log(title)
-    console.log(children)
   return (
     <Grid 
         container 
