@@ -1,24 +1,47 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import {Link as RouterLink} from 'react-router-dom'
-import { Button, Grid, Link, TextField, Typography } from '@mui/material'
+import { Alert, Button, Grid, LinearProgress, Link, TextField, Typography } from '@mui/material'
 import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks'
-import { checkingAuthentication, startGoogleSingIn } from '../../store/auth'
+import { checkingAuthentication, startGoogleSingIn, startLoginWithEmailPassword } from '../../store/auth'
+
+const formInputs = {
+  email: '',
+  password: '',
+}
+
+const formValidations = {
+  email: [ (value) => value.length >= 1, 'The input is required.'],
+  password: [ (value) => value.length >= 1, 'The input is required.'],
+}
 
 export const LoginPage = () => {
+  const [formSubmitted, setformSubmitted] = useState(false)
+  const [bShowInputEmail, setbShowInputEmail] = useState(false)
+  const [bShowInputPasswd, setbShowInputPasswd] = useState(false)
   const dispatch = useDispatch();
-  const { status } = useSelector( state => state.auth)
+  const { status, errorMessage } = useSelector( state => state.auth)
   const isAuthenticating = useMemo( () => status === 'checking', [status])
-  const { email, password, onInputChange} = useForm({
-    email: 'ramonalonso_giron@ucol.mx',
-    password: '123456',
-  })
+  // const isCheckingAuth = useMemo(() => status === 'checking', [status])
+  const bShowErrorMessage = useMemo(() => status === 'not-authenticated', [status])
+  const { 
+    email, 
+    password, 
+    onInputChange,
+    formState, isFormValid, 
+    emailValid, 
+    passwordValid
+  } = useForm(formInputs, formValidations)
 
   const onSubmit = ( event ) => {
     event.preventDefault();
+    setformSubmitted(true)
+    setbShowInputPasswd(true)
+    setbShowInputEmail(true)
+    if(!isFormValid)return
     console.log({email, password})
-    dispatch( checkingAuthentication() )
+    dispatch( startLoginWithEmailPassword(formState) )
   }
 
   const onGoogleSingIn = (  ) => {
@@ -27,6 +50,9 @@ export const LoginPage = () => {
   }
   return (
     <AuthLayout title='Login'>
+      {
+        isAuthenticating && ( <LinearProgress /> )
+      }
       <form onSubmit={ onSubmit }>
           <Grid container>
             <Grid item xs={12} sx={{marginTop:2}}>
@@ -38,6 +64,8 @@ export const LoginPage = () => {
                 name ="email"
                 value={email}
                 onChange={onInputChange}
+                error={ !!emailValid && formSubmitted }
+                helperText={ bShowInputEmail ? emailValid : '' }
               />
             </Grid>
             <Grid item xs={12} sx={{marginTop:2}}>
@@ -49,9 +77,18 @@ export const LoginPage = () => {
                 name ="password"
                 value={password}
                 onChange={onInputChange}
+                error={ !!passwordValid && formSubmitted }
+                helperText={ bShowInputPasswd ? passwordValid : '' }
               />
             </Grid>
             <Grid container spacing={2} sx={{mb: 2, mt: 1}}>
+            {
+              errorMessage && bShowErrorMessage && (
+                <Alert severity="error" sx={{ width: '100%', mt: 1 }}>
+                  There was an error in the login.
+                </Alert>
+              )
+            }
               <Grid item xs={12} md={6}>
                 <Button disabled={ isAuthenticating } type='submit' variant='contained' fullWidth>
                   Login

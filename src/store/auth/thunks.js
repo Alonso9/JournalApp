@@ -1,4 +1,4 @@
-import { SingInWithGoogle, registerUserWithEmailPassword } from "../../firebase/provider"
+import { SingInWithGoogle, loginWithEmailPassword, registerUserWithEmailPassword } from "../../firebase/provider"
 import { checkingCredentials, login, logout } from "./authSlice"
 
 export const checkingAuthentication = ( email, password ) => {
@@ -25,9 +25,37 @@ export const startGoogleSingIn = ( email, password ) => {
 
 export const startCreatingUserWithEmailPassword = ({email, password, displayName}) =>{
     return async( dispatch ) => {
-        dispatch( checkingCredentials() )
-        const result = await registerUserWithEmailPassword({email, password, displayName})
-        console.log(result)
+        try {
+            dispatch( checkingCredentials() )
+            // debugger
+            const { ok, uid, photoURL, errorMessage } = await registerUserWithEmailPassword({email, password, displayName})
+            // console.log({email, password, displayName});
+            // console.log({ ok, uid, photoURL, errorMessage })
+            if(!ok) return dispatch( logout({errorMessage}) )
+            dispatch( login(uid, displayName, email, photoURL))
+            
+        } catch (error) {
+            console.log(error);
+            return  { ok: false, errorMessage: error.message }
+            
+        }
     }
 
+}
+
+export const startLoginWithEmailPassword = ({email, password, displayName}) => {
+    return  async( dispatch ) => {
+        try {
+            dispatch( checkingCredentials() )
+            // debugger
+            const result = await loginWithEmailPassword({email, password})
+            // console.log(result);
+            // console.log({ ok, uid, photoURL, errorMessage })
+            if(!result.ok) return dispatch( logout(result) )
+            dispatch( login(result))
+        } catch (error) {
+            console.log(error.message);
+            return  { ok: false, errorMessage: error.message }
+        }
+    }
 }

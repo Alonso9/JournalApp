@@ -1,10 +1,10 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { AuthLayout } from '../layout/AuthLayout'
 import {Link as RouterLink} from 'react-router-dom'
 // import Google from "@mui/icons-material";
-import { Button, Grid, Link, TextField, Typography } from '@mui/material'
+import { Alert, Box, Button, CircularProgress, Grid, LinearProgress, Link, TextField, Typography } from '@mui/material'
 import { useForm } from '../../hooks'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { startCreatingUserWithEmailPassword } from '../../store/auth/thunks'
 
 const formData = {
@@ -23,7 +23,10 @@ const formValidations = {
 export const RegisterPage = () => {
   const [formSubmitted, setformSubmitted] = useState(false)
   const dispatch = useDispatch();
-
+  const { status, errorMessage } = useSelector( state => state.auth)
+  const isCheckingAuth = useMemo(() => status === 'checking', [status])
+  const bShiwErrorMessage = useMemo(() => status === 'not-authenticated', [status])
+  // console.log(status, errorMessage); 
   const {displayName, email, password, onInputChange, onResetForm, 
     formState, isFormValid, displayNameValid, emailValid, passwordValid,
   } = useForm(formData, formValidations)
@@ -37,6 +40,9 @@ export const RegisterPage = () => {
 
   return (
     <AuthLayout title='Register'>
+      {
+        isCheckingAuth && ( <LinearProgress /> )
+      }
       <h1>Valid form: { isFormValid ? '👍🏿' : '👎🏿' }</h1>
       <form onSubmit={ onSubmit }>
           <Grid container>
@@ -79,9 +85,24 @@ export const RegisterPage = () => {
                 helperText={ passwordValid }
               />
             </Grid>
-            <Grid container spacing={2} sx={{mb: 2, mt: 1}}>
+            {
+              errorMessage && bShiwErrorMessage && (
+                <Alert severity="error" sx={{ width: '100%', mt: 1 }}>
+                  There was an error while saving the user.
+                </Alert>
+              )
+            }
+
+            {
+              isCheckingAuth && (
+                <Grid container sx={{ justifyContent: 'center' }} >
+                  <CircularProgress size={50}  />  
+                </Grid>
+              ) 
+            }
+            <Grid container spacing={2} sx={{mb: 1, mt: 1}}>
               <Grid item xs={12} md={12}>
-                <Button variant='contained' fullWidth type='submit'> 
+                <Button variant='contained' fullWidth type='submit' disabled={ isCheckingAuth }> 
                   Create an account
                 </Button>
               </Grid>
