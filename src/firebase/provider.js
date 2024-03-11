@@ -50,7 +50,7 @@ export const loginWithEmailPassword = async ({email, password}) => {
         const resp = await signInWithEmailAndPassword(FirebaseAuth, email, password)
         // console.log(resp);
         const { uid, photoURL, displayName } = resp.user;
-        // await updateProfile( FirebaseAuth.currentUser, () => { displayName }); // Actualizamos el displayName 
+        await updateProfile( FirebaseAuth.currentUser, () => { displayName }); // Actualizamos el displayName 
         return {
             ok: true,
             displayName, email, photoURL, uid
@@ -62,4 +62,9 @@ export const loginWithEmailPassword = async ({email, password}) => {
             errorMessage: error.message
         }
     }
+}
+
+export const logoutFirebase = async() => {
+    // Cierra todo losproveedores, ya email, Facebook o gmail
+    return await FirebaseAuth.signOut();
 }

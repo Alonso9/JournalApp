@@ -2,9 +2,19 @@
 import { AppBar, Grid, IconButton, Toolbar, Typography } from "@mui/material";
 // import 'font-awesome/css/font-awesome.min.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { onLog } from "firebase/app";
+import { getAuth, signOut } from "firebase/auth";
+import { useDispatch } from "react-redux";
+import { logout, startLogout } from "../../store/auth";
 
 
 export const Navbar = ({ drawerWitdth = 240 }) => {
+  const dispatch = useDispatch();
+  
+  // console.log(auth);
+  const onLogout = ()=> {
+    dispatch( startLogout() );  
+  }
   return (
     <AppBar 
         position="fixed" 
@@ -25,9 +35,7 @@ export const Navbar = ({ drawerWitdth = 240 }) => {
             </IconButton>
             <Grid container direction='row' justifyContent='space-between' alignContent='center'>
               <Typography variant="h6" noWrap component='div'> Journal App</Typography>
-              <IconButton color='error'> 
-                {/* Logout icon */}
-                {/* <div><i className="fa-solid fa-arrow-right-from-bracket">A</i></div> */}
+              <IconButton color='error' variant='button' onClick={ onLogout  } > 
                 <FontAwesomeIcon icon="fa-solid fa-arrow-right-from-bracket" />
               </IconButton>
             </Grid>

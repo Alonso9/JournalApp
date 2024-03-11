@@ -1,7 +1,9 @@
 import { Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useSelector } from "react-redux";
 
 export const SideBar = ({ drawerWidth }) => {
+    const { status, displayName, email, photoUrl } =  useSelector( state => state.auth )
   return (
     <Box
         component='nav'
@@ -16,7 +18,11 @@ export const SideBar = ({ drawerWidth }) => {
             }}
         >
             <Toolbar>
-                <Typography variant="h6" noWrap> Ramon Alonso</Typography>
+                <Box>
+                    <Typography variant="h6" noWrap>{ displayName }</Typography>
+                    <Divider />
+                    <Typography variant="p" noWrap>{ email }</Typography>
+                </Box>
             </Toolbar>
             <Divider/>
             <List>

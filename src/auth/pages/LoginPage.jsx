@@ -5,6 +5,7 @@ import { Alert, Button, Grid, LinearProgress, Link, TextField, Typography } from
 import { AuthLayout } from '../layout/AuthLayout'
 import { useForm } from '../../hooks'
 import { checkingAuthentication, startGoogleSingIn, startLoginWithEmailPassword } from '../../store/auth'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 const formInputs = {
   email: '',
@@ -53,7 +54,7 @@ export const LoginPage = () => {
       {
         isAuthenticating && ( <LinearProgress /> )
       }
-      <form onSubmit={ onSubmit }>
+      <form onSubmit={ onSubmit } className='animate__animated animate__fadeIn animate__faster'>
           <Grid container>
             <Grid item xs={12} sx={{marginTop:2}}>
               <TextField
@@ -98,6 +99,7 @@ export const LoginPage = () => {
                 <Button disabled={ isAuthenticating } variant='contained' fullWidth onClick={onGoogleSingIn}>
                   {/* <Google /> */}
                   <Typography >Google</Typography>
+                  {/* <FontAwesomeIcon icon="fa-brands fa-google" style={{color: "#d20f0f",}} /> */}
                 </Button>
               </Grid>
             </Grid>
