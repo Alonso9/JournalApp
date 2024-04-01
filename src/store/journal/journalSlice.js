@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 export const JournalSlice = createSlice({
     name: 'Journal',
     initialState : {
-        isSaving: true, // bandera para saber si esta guardando
+        isSaving: false, // bandera para saber si esta guardando
         messageSaved: '',
         notes: [],
         active: null, // Para saber que nota esta activa
@@ -17,14 +17,19 @@ export const JournalSlice = createSlice({
         
     },
     reducers: {
-        addNewEmptyNote: (state, action) => {
+        savingNewNote: (state, action) => {
+            state.isSaving = true;
+        },
 
+        addNewEmptyNote: (state, action) => {
+            state.notes.push( action.payload ); // Le grabamos al nodo de notas del redux la nueva nota
+            state.isSaving = false;
         },
         setActiveNote: (state, action) => {
-
+            state.active = action.payload;
         },
         setNotes: (state, action) => {
-
+            state.notes = action.payload;
         },
         setSaving: (state) => {
 
@@ -38,4 +43,4 @@ export const JournalSlice = createSlice({
     }
 });
 
-export const { addNewEmptyNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById } = JournalSlice.actions; 
+export const { savingNewNote, addNewEmptyNote, setActiveNote, setNotes, setSaving, updateNote, deleteNoteById } = JournalSlice.actions; 

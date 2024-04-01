@@ -1,9 +1,17 @@
 import { Box, Divider, Drawer, Grid, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Toolbar, Typography } from "@mui/material"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { SideBarItem } from "./SideBarItem";
+import { setNotes } from "../../store/journal/journalSlice";
 
 export const SideBar = ({ drawerWidth }) => {
+    const dispatch = useDispatch();
+    const { isSaving, messageSaved, active, notes } = useSelector( state => state.journal)
     const { status, displayName, email, photoUrl } =  useSelector( state => state.auth )
+
+    const setActiveNote = (note) => {
+        dispatch( setNotes(note) );
+    }
   return (
     <Box
         component='nav'
@@ -27,19 +35,8 @@ export const SideBar = ({ drawerWidth }) => {
             <Divider/>
             <List>
                 {
-                    ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"].map( text => (
-                        <ListItem key={text} disablePadding>
-                            <ListItemButton>
-                                <ListItemIcon color="error">
-                                    {/* save */}
-                                    <FontAwesomeIcon icon="fa-solid fa-bookmark" />
-                                </ListItemIcon>
-                                <Grid container>
-                                    <ListItemText primary={text} />
-                                    <ListItemText secondary={'Some text to fill this example xd.'} />
-                                </Grid>
-                            </ListItemButton>
-                        </ListItem>
+                    notes.map( note => (
+                        <SideBarItem {...note} key={note.id} />
                     ))
                 }
             </List>

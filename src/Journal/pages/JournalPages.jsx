@@ -3,17 +3,28 @@ import { JournaLayout } from "../layout/JournaLayout"
 import { NoteView, NothingSelectedView } from "../Views";
 import { ImageGallery } from "../Components";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDispatch, useSelector } from "react-redux";
+import { startNewNote } from "../../store/journal/thunks";
 
 const drawerWith = 240;
 
 export const JournalPage = () => {
+  const dispatch = useDispatch();
+  const { isSaving, messageSaved, active } = useSelector( state => state.journal)
+  const onClickNewNote = () => {
+    dispatch( startNewNote() )
+  }
   return (
     <>
     <JournaLayout>
-      <NothingSelectedView/>
-      {/* <NoteView/> */}
+
+      {
+        active == null ? <NothingSelectedView/> : <NoteView/>
+      }
 
       <IconButton
+        disabled={isSaving}
+        onClick={ onClickNewNote }
         size="large"
         sx={{
           color: 'white',
