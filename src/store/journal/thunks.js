@@ -1,12 +1,12 @@
 import { collection, doc, setDoc } from "firebase/firestore/lite";
 import { FirebaseDB } from "../../firebase/config";
-import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes } from "./journalSlice";
+import { addNewEmptyNote, savingNewNote, setActiveNote, setNotes, setSaving, updateNote } from "./journalSlice";
 import { loadNotes } from "../../helpers/loadNotes";
 
 export const startNewNote = () => {
     return async( dispatch, getState ) => {
         dispatch(savingNewNote());
-        console.log("start");
+        // console.log("start");
         // console.log(getState()); // Con el getState() obtenemos los datos del Redux
         const { uid } = getState().auth;
 
@@ -19,7 +19,7 @@ export const startNewNote = () => {
         const newDoc = doc( collection( FirebaseDB, `${uid}/Journal/Notes` ) );
         const resp = await setDoc( newDoc, newNote );
 
-        console.log(newDoc);
+        // console.log(newDoc);
 
         newNote.id= newDoc.id;
         dispatch( addNewEmptyNote(newNote) );
@@ -34,10 +34,31 @@ export const startLoadingnotes = () => {
         if(!uid) throw new Error('The UID user does not exist');
 
         const notes = await loadNotes(uid);
-        console.log({notas : notes})
+        // console.log({notas : notes})
         dispatch(setNotes(notes))
-        console.log(uid);
+        // console.log(uid);
     }
+}
+
+export const startSavingNote = () => {
+    return async( dispatch, getState ) => {
+        dispatch( setSaving() )
+        const { uid } = getState().auth;
+        const { active:note } = getState().journal; // Aqui guardamos la nota activa con todos sus valores
+
+        if(!uid) throw new Error('The UID user does not exist');
+
+        const noteToFireStore = { ...note }
+        delete noteToFireStore.id; // Eleminamos la propiedad del objeto, para guardar la nueva nota sin el id
+
+        // console.log(noteToFireStore)
+        const docRef = doc( FirebaseDB, `${uid}/Journal/Notes/${note.id}`);
+        // merge es una union que si hay campos que se mandan aqui que son nuevos, los qwue ya existen en Firestore se conserven
+        await setDoc( docRef, noteToFireStore, { merge: true } ) 
+        noteToFireStore.id = note.id;
+        dispatch( updateNote(noteToFireStore) )
+    }
+
 }
  
 /*

@@ -7,7 +7,7 @@ import { setActiveNote, setNotes } from '../../store/journal/journalSlice'
 export const SideBarItem = ({ id, title = '', body, date, imageUrls = [] }) => {
     const dispatch = useDispatch();
     const newTitle = useMemo(() => {
-        console.log(title.length+title)
+        // console.log(title.length+title)
         return title.length > 17 
         ? title.substring(0, 17)+'...' : title;
     }, [title])
